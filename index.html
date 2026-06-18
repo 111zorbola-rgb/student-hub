@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
@@ -164,154 +164,186 @@
             opacity: 1;
         }
 .gpa-form {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+         display: flex;
+         flex-direction: column;
+         gap: 12px;
+     }
 
-        .gpa-result {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            font-weight: 600;
-            display: none;
-        }
+     .gpa-result {
+[6/19/2026 3:16 AM] Samandar: margin-top: 20px;
+         padding: 15px;
+         border-radius: 12px;
+         text-align: center;
+         font-weight: 600;
+         display: none;
+     }
 
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 65px;
-            background: white;
-            display: flex;
-            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
-            border-top: 1px solid #edf2f7;
-            z-index: 1000;
-        }
+     .bottom-nav {
+         position: fixed;
+         bottom: 0;
+         left: 0;
+         right: 0;
+         height: 65px;
+         background: white;
+         display: flex;
+         box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+         border-top: 1px solid #edf2f7;
+         z-index: 1000;
+     }
 
-        .nav-tab {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            color: #64748b;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+     .nav-tab {
+         flex: 1;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+         gap: 4px;
+         color: #64748b;
+         font-size: 12px;
+         font-weight: 500;
+         cursor: pointer;
+         transition: all 0.2s ease;
+     }
 
-        .nav-tab span {
-            font-size: 20px;
-        }
+     .nav-tab span {
+         font-size: 20px;
+     }
 
-        .nav-tab.active {
-            color: #1e62ff;
-            font-weight: 600;
-        }
+     .nav-tab.active {
+         color: #1e62ff;
+         font-weight: 600;
+     }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+     @keyframes fadeIn {
+         from { opacity: 0; transform: translateY(10px); }
+         to { opacity: 1; transform: translateY(0); }
+     }
+ </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>🎓 Student Hub</h1>
-        <p>Talaba aqlli assistenti</p>
-    </div>
+ <div class="header">
+     <h1>🎓 Student Hub</h1>
+     <p>Talaba aqlli assistenti</p>
+ </div>
 
-    <div class="container">
-        <div id="vazifalar-page" class="page active">
-            <h2 class="section-title">📌 Joriy topshiriqlar</h2>
-            <div class="card">
-                <div class="input-group">
-                    <input type="text" id="task-input" placeholder="Vazifa nomini kiriting...">
-                    <button class="btn-primary" id="add-task-btn">+ Qo'shish</button>
-                </div>
-                <ul class="task-list" id="task-container"></ul>
-            </div>
-        </div>
+ <div class="container">
+     <!-- VAZIFALAR SAHIFASI -->
+     <div id="vazifalar-page" class="page active">
+         <h2 class="section-title">📌 Joriy topshiriqlar</h2>
 
-        <div id="gpa-page" class="page">
-            <h2 class="section-title">📊 
-                        GPA
-                      </div>
-    </nav>
+div class="card">
+             <div class="input-group">
+                 <input type="text" id="task-input" placeholder="Vazifa nomini kiriting...">
+                 <button class="btn-primary" id="add-task-btn">+ Qo'shish</button>
+             </div>
+             <ul class="task-list" id="task-container"></ul>
+         </div>
+     </div>
 
-    <script>
-        // Telegram WebApp sozlash
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+     <!-- GPA KALKULYATOR SAHIFASI -->
+     <div id="gpa-page" class="page">
+         <h2 class="section-title">📊 GPA Kalkulyator</h2>
+         <div class="card">
+             <div class="gpa-form">
+                 <input type="number" id="credit-input" placeholder="Kredit miqdori (masalan: 6)" min="1">
+                 <select id="grade-input">
+                     <option value="">Bahoni tanlang (Asosiy)</option>
+                     <option value="5">5 (A - Alo)</option>
+                     <option value="4">4 (B - Yaxshi)</option>
+                     <option value="3">3 (C - Qoniqarli)</option>
+                     <option value="2">2 (D/F - Qoniqarsiz)</option>
+                 </select>
+                 <button class="btn-primary" id="add-subject-btn">+ Fan qo'shish</button>
+             </div>
+             <div class="gpa-result" id="gpa-result-box"></div>
+         </div>
+     </div>
+ </div>
 
-        // Sahifalarni almashtirish funksiyasi
-        function switchPage(pageId, tabElement) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
-            
-            document.getElementById(pageId).classList.add('active');
-            tabElement.classList.add('active');
-        }
+ <!-- PASTKI NAVIGATSIYA -->
+ <nav class="bottom-nav">
+     <div class="nav-tab active" onclick="switchPage('vazifalar-page', this)">
+         <span>📋</span>
+         Vazifalar
+     </div>
+     <div class="nav-tab" onclick="switchPage('gpa-page', this)">
+         <span>📊</span>
+         GPA
+     </div>
+ </nav>
 
-        // --- VAZIFALAR LOGIKASI ---
-        const taskInput = document.getElementById('task-input');
-        const addTaskBtn = document.getElementById('add-task-btn');
-        const taskContainer = document.getElementById('task-container');
+ <script>
+     // Telegram WebApp sozlash
+     const tg = window.Telegram.WebApp;
+     tg.expand();
 
-        addTaskBtn.addEventListener('click', () => {
-            const text = taskInput.value.trim();
-            if (!text) return;
+     // Sahifalarni almashtirish funksiyasi
+     function switchPage(pageId, tabElement) {
+         document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+         document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+         
+         document.getElementById(pageId).classList.add('active');
+         tabElement.classList.add('active');
+     }
 
-            const li = document.createElement('li');
-            li.className = 'task-item';
-            li.innerHTML = 
-                <div class="task-left" onclick="this.parentElement.classList.toggle('completed')">
-                    <input type="checkbox" class="task-checkbox">
-                    <span class="task-text">${text}</span>
-                </div>
-                <button class="delete-btn" onclick="this.parentElement.remove()">🗑️</button>
-            ;
-            taskContainer.appendChild(li);
-            taskInput.value = '';
-        });
+     // --- VAZIFALAR LOGIKASI ---
+     const taskInput = document.getElementById('task-input');
+     const addTaskBtn = document.getElementById('add-task-btn');
+     const taskContainer = document.getElementById('task-container');
 
-        // --- GPA LOGIKASI ---
-        let totalCredits = 0;
-        let totalPoints = 0;
+     addTaskBtn.addEventListener('click', () => {
+         const text = taskInput.value.trim();
+         if (!text) return;
 
-        const creditInput = document.getElementById('credit-input');
-        const gradeInput = document.getElementById('grade-input');
-        const addSubjectBtn = document.getElementById('add-subject-btn');
-        const gpaResultBox = document.getElementById('gpa-result-box');
+         const li = document.createElement('li');
+         li.className = 'task-item';
+         li.innerHTML =
 
-        addSubjectBtn.addEventListener('click', () => {
-            const credit = parseFloat(creditInput.value);
-            const grade = parseFloat(gradeInput.value);
+             <div class="task-left" onclick="this.parentElement.classList.toggle('completed')">
+                 <input type="checkbox" class="task-checkbox">
+[6/19/2026 3:16 AM] Samandar: <span class="task-text">${text}</span>
+             </div>
+             <button class="delete-btn" onclick="this.parentElement.remove()">🗑️</button>
+         
+;
+         taskContainer.appendChild(li);
+         taskInput.value = '';
+     });
 
-            if (!credit || !grade) {
-                alert("Iltimos, kredit va bahoni to'g'ri tanlang!");
-                return;
-            }
+     // --- GPA LOGIKASI ---
+     let totalCredits = 0;
+     let totalPoints = 0;
 
-            totalCredits += credit;
-            totalPoints += (credit * grade);
+     const creditInput = document.getElementById('credit-input');
+     const gradeInput = document.getElementById('grade-input');
+     const addSubjectBtn = document.getElementById('add-subject-btn');
+     const gpaResultBox = document.getElementById('gpa-result-box');
 
-            const gpa = (totalPoints / totalCredits).toFixed(2);
+     addSubjectBtn.addEventListener('click', () => {
+         const credit = parseFloat(creditInput.value);
+         const grade = parseFloat(gradeInput.value);
 
-            gpaResultBox.style.display = 'block';
-            gpaResultBox.style.background = '#e0f2fe';
-            gpaResultBox.style.color = '#0369a1';
-            gpaResultBox.innerHTML = Umumiy kredit: ${totalCredits} | Joriy GPA: ${gpa};
+         if (!credit || !grade) {
+             alert("Iltimos, kredit va bahoni to'g'ri tanlang!");
+             return;
+         }
 
-            creditInput.value = '';
-            gradeInput.value = '';
-        });
-    </script>
+         totalCredits += credit;
+         totalPoints += (credit * grade);
+
+         const gpa = (totalPoints / totalCredits).toFixed(2);
+
+gpaResultBox.style.display = 'block';
+         gpaResultBox.style.background = '#e0f2fe';
+         gpaResultBox.style.color = '#0369a1';
+         gpaResultBox.innerHTML =
+Umumiy kredit: ${totalCredits} | Joriy GPA: ${gpa}
+;
+
+         creditInput.value = '';
+         gradeInput.value = '';
+     });
+ </script>
 </body>
-</html>  
+</html>
