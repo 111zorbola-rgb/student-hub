@@ -1,0 +1,99 @@
+[6/19/2026 12:59 AM] Samandar: <!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Hub</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans antialiased pb-20">
+
+    <div class="bg-blue-600 text-white p-4 shadow-md text-center sticky top-0 z-50">
+        <h1 class="text-xl font-bold">🎓 Student Hub</h1>
+        <p class="text-xs opacity-80">Talaba aqlli assistenti</p>
+    </div>
+
+    <!-- VAZIFALAR (TASK MANAGER) -->
+    <div id="tasks-section" class="p-4 max-w-md mx-auto">
+        <h2 class="text-lg font-semibold mb-3 flex items-center gap-2">📌 Joriy topshiriqlar</h2>
+        <div class="bg-white p-4 rounded-xl shadow-sm mb-4">
+            <input id="task-input" type="text" placeholder="Yangi topshiriq (masalan: Kiberxavfsizlik lab...)" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+            <button onclick="addTask()" class="w-full mt-2 bg-blue-600 text-white p-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition">+ Qo'shish</button>
+        </div>
+        <div id="tasks-list" class="space-y-2"></div>
+    </div>
+
+    <!-- GPA KALKULYATOR -->
+    <div id="gpa-section" class="p-4 max-w-md mx-auto hidden">
+        <h2 class="text-lg font-semibold mb-3">🧮 GPA Hisoblagich</h2>
+        <div class="bg-white p-4 rounded-xl shadow-sm space-y-3">
+            <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Fanlar sonini kiriting:</label>
+                <input id="subjects-count" type="number" value="3" class="w-full p-2 border rounded-lg text-sm">
+            </div>
+            <button onclick="generateGpaInputs()" class="w-full bg-gray-800 text-white p-2 rounded-lg text-sm font-semibold">Fanlarni kiritish</button>
+            <div id="gpa-inputs" class="space-y-2 mt-3"></div>
+            <button onclick="calculateGpa()" class="w-full bg-green-600 text-white p-2 rounded-lg text-sm font-semibold hidden" id="calc-btn">Hisoblash</button>
+            <div id="gpa-result" class="text-center text-xl font-bold text-green-600 mt-4"></div>
+        </div>
+    </div>
+
+    <!-- NAVIGATSIYA TUGMALARI -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg flex justify-around p-2 z-50">
+        <button onclick="switchTab('tasks')" class="flex flex-col items-center text-blue-600 font-medium text-xs">
+            <span class="text-xl">📋</span><span>Vazifalar</span>
+        </button>
+        <button onclick="switchTab('gpa')" class="flex flex-col items-center text-gray-500 font-medium text-xs">
+            <span class="text-xl">📊</span><span>GPA</span>
+        </button>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        function switchTab(tab) {
+            if(tab === 'tasks') {
+                document.getElementById('tasks-section').classList.remove('hidden');
+                document.getElementById('gpa-section').classList.add('hidden');
+            } else {
+                document.getElementById('tasks-section').classList.add('hidden');
+                document.getElementById('gpa-section').classList.remove('hidden');
+            }
+        }
+
+        function addTask() {
+            const input = document.getElementById('task-input');
+            if (!input.value.trim()) return;
+            const list = document.getElementById('tasks-list');
+            const div = document.createElement('div');
+            div.className = "bg-white p-3 rounded-lg shadow-sm flex justify-between items-center border-l-4 border-blue-500";
+            div.innerHTML = <span class="text-sm">${input.value}</span><button onclick="this.parentElement.remove()" class="text-red-500 text-xs font-bold">O'chirish</button>;
+            list.appendChild(div);
+            input.value = '';
+        }
+[6/19/2026 12:59 AM] Samandar: function generateGpaInputs() {
+            const count = document.getElementById('subjects-count').value;
+            const container = document.getElementById('gpa-inputs');
+            container.innerHTML = '';
+            for(let i=1; i<=count; i++) {
+                container.innerHTML += <div class="flex gap-2"><input type="text" placeholder="Fan" class="w-1/2 p-2 border rounded-lg text-xs"><input type="number" placeholder="Ball" class="w-1/2 p-2 border rounded-lg text-xs gpa-score"></div>;
+            }
+            document.getElementById('calc-btn').classList.remove('hidden');
+        }
+
+        function calculateGpa() {
+            const scores = document.getElementsByClassName('gpa-score');
+            let total = 0, count = 0;
+            for(let i=0; i<scores.length; i++) {
+                if(scores[i].value) { total += parseFloat(scores[i].value); count++; }
+            }
+            if(count > 0) {
+                const average = (total / count).toFixed(1);
+                document.getElementById('gpa-result').innerText = O'rtacha ball: ${average};
+            }
+        }
+    </script>
+</body>
+</html>
